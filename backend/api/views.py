@@ -57,6 +57,23 @@ def change_password_view(request):
         return Response({'message': 'Password changed successfully'})
     return Response(serializer.errors, status=400)
 
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def change_username_view(request):
+    new_username = request.data.get('username', '').strip()
+    if not new_username:
+        return Response({'error': 'Username is required'}, status=400)
+    if len(new_username) < 2:
+        return Response({'error': 'Username must be at least 2 characters'}, status=400)
+    from django.contrib.auth.models import User
+    if User.objects.filter(username=new_username).exclude(pk=request.user.pk).exists():
+        return Response({'error': 'Username already taken'}, status=400)
+    request.user.username = new_username
+    request.user.save()
+    return Response({'message': 'Username updated', 'username': new_username})
+
+
 class TaskListAPIView(APIView):
     permission_classes = [IsAuthenticated]
 

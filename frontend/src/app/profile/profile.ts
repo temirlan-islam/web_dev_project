@@ -18,6 +18,7 @@ export class Profile implements OnInit {
   highCount = 0;
   streakDays = 0;
   joinDate = 'Jan 2026';
+  newUsername = '';
   oldPassword = '';
   newPassword = '';
   confirmPassword = '';
@@ -117,6 +118,24 @@ export class Profile implements OnInit {
       old_password: this.oldPassword, new_password: this.newPassword
     }).subscribe({
       next: (r) => { this.successMsg = r.message || 'Password changed!'; this.oldPassword=''; this.newPassword=''; this.confirmPassword=''; this.cdr.detectChanges(); },
+      error: (e) => { this.errorMsg = e.error?.error || 'Failed'; this.cdr.detectChanges(); }
+    });
+  }
+
+  changeUsername() {
+    this.successMsg = ''; this.errorMsg = '';
+    if (!this.newUsername.trim()) { this.errorMsg = 'Enter a username'; return; }
+    if (this.newUsername.trim().length < 2) { this.errorMsg = 'Min 2 characters'; return; }
+    this.http.post<any>('http://127.0.0.1:8000/api/change-username/', {
+      username: this.newUsername.trim()
+    }).subscribe({
+      next: (r) => {
+        this.username = r.username;
+        localStorage.setItem('username', r.username);
+        this.newUsername = '';
+        this.successMsg = r.message || 'Username updated!';
+        this.cdr.detectChanges();
+      },
       error: (e) => { this.errorMsg = e.error?.error || 'Failed'; this.cdr.detectChanges(); }
     });
   }

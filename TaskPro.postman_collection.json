@@ -1,0 +1,394 @@
+{
+	"info": {
+		"name": "TaskPro API",
+		"description": "Full API collection for TaskPro — Angular + Django Task Manager",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://127.0.0.1:8000/api"
+		},
+		{
+			"key": "access_token",
+			"value": ""
+		}
+	],
+	"item": [
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();",
+									"if (jsonData.access) {",
+									"    pm.collectionVariables.set('access_token', jsonData.access);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"Tima\",\n    \"password\": \"1234\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/login/",
+							"host": ["{{base_url}}"],
+							"path": ["login", ""]
+						}
+					},
+					"response": [
+						{
+							"name": "Success",
+							"status": "OK",
+							"code": 200,
+							"body": "{\n    \"access\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...\",\n    \"refresh\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...\"\n}"
+						},
+						{
+							"name": "Invalid credentials",
+							"status": "Bad Request",
+							"code": 400,
+							"body": "{\n    \"error\": \"Invalid credentials\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Logout",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/logout/",
+							"host": ["{{base_url}}"],
+							"path": ["logout", ""]
+						}
+					},
+					"response": [
+						{
+							"name": "Success",
+							"status": "OK",
+							"code": 200,
+							"body": "{\n    \"message\": \"Logged out\"\n}"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Profile",
+			"item": [
+				{
+					"name": "Get Profile",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/profile/",
+							"host": ["{{base_url}}"],
+							"path": ["profile", ""]
+						}
+					},
+					"response": [
+						{
+							"name": "Success",
+							"status": "OK",
+							"code": 200,
+							"body": "{\n    \"user\": {\n        \"id\": 1,\n        \"username\": \"Tima\"\n    },\n    \"task_count\": 5,\n    \"done_count\": 2\n}"
+						}
+					]
+				},
+				{
+					"name": "Change Password",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"old_password\": \"1234\",\n    \"new_password\": \"newpass123\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/change-password/",
+							"host": ["{{base_url}}"],
+							"path": ["change-password", ""]
+						}
+					},
+					"response": [
+						{
+							"name": "Success",
+							"status": "OK",
+							"code": 200,
+							"body": "{\n    \"message\": \"Password changed successfully\"\n}"
+						},
+						{
+							"name": "Wrong password",
+							"status": "Bad Request",
+							"code": 400,
+							"body": "{\n    \"error\": \"Wrong current password\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Change Username",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"NewUsername\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/change-username/",
+							"host": ["{{base_url}}"],
+							"path": ["change-username", ""]
+						}
+					},
+					"response": [
+						{
+							"name": "Success",
+							"status": "OK",
+							"code": 200,
+							"body": "{\n    \"message\": \"Username updated\",\n    \"username\": \"NewUsername\"\n}"
+						},
+						{
+							"name": "Already taken",
+							"status": "Bad Request",
+							"code": 400,
+							"body": "{\n    \"error\": \"Username already taken\"\n}"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Tasks",
+			"item": [
+				{
+					"name": "Get All Tasks",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/tasks/",
+							"host": ["{{base_url}}"],
+							"path": ["tasks", ""]
+						}
+					},
+					"response": [
+						{
+							"name": "Success",
+							"status": "OK",
+							"code": 200,
+							"body": "[\n    {\n        \"id\": 1,\n        \"title\": \"Buy groceries\",\n        \"description\": \"Milk, bread, eggs\",\n        \"status\": false,\n        \"priority\": \"high\",\n        \"due_date\": \"2026-04-20\",\n        \"created_at\": \"2026-04-17T10:30:00Z\",\n        \"user\": 1,\n        \"category\": 1,\n        \"category_name\": \"Shopping\"\n    },\n    {\n        \"id\": 2,\n        \"title\": \"Study Angular\",\n        \"description\": \"Components and services\",\n        \"status\": true,\n        \"priority\": \"medium\",\n        \"due_date\": null,\n        \"created_at\": \"2026-04-16T08:00:00Z\",\n        \"user\": 1,\n        \"category\": null,\n        \"category_name\": null\n    }\n]"
+						}
+					]
+				},
+				{
+					"name": "Get Single Task",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/tasks/1/",
+							"host": ["{{base_url}}"],
+							"path": ["tasks", "1", ""]
+						}
+					},
+					"response": [
+						{
+							"name": "Success",
+							"status": "OK",
+							"code": 200,
+							"body": "{\n    \"id\": 1,\n    \"title\": \"Buy groceries\",\n    \"description\": \"Milk, bread, eggs\",\n    \"status\": false,\n    \"priority\": \"high\",\n    \"due_date\": \"2026-04-20\",\n    \"created_at\": \"2026-04-17T10:30:00Z\",\n    \"user\": 1,\n    \"category\": 1,\n    \"category_name\": \"Shopping\"\n}"
+						},
+						{
+							"name": "Not Found",
+							"status": "Not Found",
+							"code": 404,
+							"body": "{\n    \"detail\": \"Not found.\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Create Task",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"New Task\",\n    \"description\": \"Task description here\",\n    \"priority\": \"high\",\n    \"due_date\": \"2026-04-25\",\n    \"category\": 1\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/tasks/",
+							"host": ["{{base_url}}"],
+							"path": ["tasks", ""]
+						}
+					},
+					"response": [
+						{
+							"name": "Created",
+							"status": "Created",
+							"code": 201,
+							"body": "{\n    \"id\": 3,\n    \"title\": \"New Task\",\n    \"description\": \"Task description here\",\n    \"status\": false,\n    \"priority\": \"high\",\n    \"due_date\": \"2026-04-25\",\n    \"created_at\": \"2026-04-20T01:00:00Z\",\n    \"user\": 1,\n    \"category\": 1,\n    \"category_name\": \"Shopping\"\n}"
+						},
+						{
+							"name": "Validation Error",
+							"status": "Bad Request",
+							"code": 400,
+							"body": "{\n    \"title\": [\"This field is required.\"]\n}"
+						}
+					]
+				},
+				{
+					"name": "Update Task",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"Updated Task Title\",\n    \"status\": true,\n    \"priority\": \"low\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/tasks/1/",
+							"host": ["{{base_url}}"],
+							"path": ["tasks", "1", ""]
+						}
+					},
+					"response": [
+						{
+							"name": "Success",
+							"status": "OK",
+							"code": 200,
+							"body": "{\n    \"id\": 1,\n    \"title\": \"Updated Task Title\",\n    \"description\": \"Milk, bread, eggs\",\n    \"status\": true,\n    \"priority\": \"low\",\n    \"due_date\": \"2026-04-20\",\n    \"created_at\": \"2026-04-17T10:30:00Z\",\n    \"user\": 1,\n    \"category\": 1,\n    \"category_name\": \"Shopping\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Delete Task",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/tasks/1/",
+							"host": ["{{base_url}}"],
+							"path": ["tasks", "1", ""]
+						}
+					},
+					"response": [
+						{
+							"name": "Deleted",
+							"status": "No Content",
+							"code": 204,
+							"body": ""
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Categories",
+			"item": [
+				{
+					"name": "Get All Categories",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/categories/",
+							"host": ["{{base_url}}"],
+							"path": ["categories", ""]
+						}
+					},
+					"response": [
+						{
+							"name": "Success",
+							"status": "OK",
+							"code": 200,
+							"body": "[\n    {\n        \"id\": 1,\n        \"name\": \"Shopping\"\n    },\n    {\n        \"id\": 2,\n        \"name\": \"Work\"\n    },\n    {\n        \"id\": 3,\n        \"name\": \"Study\"\n    }\n]"
+						}
+					]
+				}
+			]
+		}
+	]
+}

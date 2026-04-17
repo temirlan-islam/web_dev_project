@@ -116,6 +116,18 @@
       <!-- SECURITY -->
       <div *ngIf="activeTab==='security'" class="tab-panel">
         <div class="security-card">
+          <h3>Change Username</h3>
+          <form (ngSubmit)="changeUsername()" class="password-form">
+            <div class="field">
+              <label>New Username</label>
+              <input type="text" [(ngModel)]="newUsername" name="username" [placeholder]="username" />
+            </div>
+            <div *ngIf="successMsg" class="success-msg">{{ successMsg }}</div>
+            <div *ngIf="errorMsg" class="error-msg">{{ errorMsg }}</div>
+            <button type="submit" class="btn-gold">Update Username</button>
+          </form>
+        </div>
+        <div class="security-card">
           <h3>Change Password</h3>
           <form (ngSubmit)="changePassword()" class="password-form">
             <div class="field">

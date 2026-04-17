@@ -41,53 +41,53 @@ export class Dashboard implements OnInit {
 
   getTimeEstimate(task: Task): string {
     const t = (task.title + ' ' + (task.description || '')).toLowerCase();
-    if (t.match(/clean|wash|laundry|dishes|mop|sweep|vacuum|уборк|помы|постир|пылесос/)) return '30-60 мин';
-    if (t.match(/cook|dinner|lunch|breakfast|meal|готов|обед|ужин|завтрак/)) return '45-90 мин';
-    if (t.match(/study|learn|read|homework|essay|exam|учи|читать|домашн|экзамен|подготов/)) return '1-3 часа';
-    if (t.match(/work|project|report|presentation|работ|проект|отчёт|презентац/)) return '2-4 часа';
-    if (t.match(/exercise|gym|run|workout|sport|тренир|спорт|бег|зал/)) return '30-60 мин';
-    if (t.match(/shop|buy|store|grocery|market|магазин|купить|покупк/)) return '30-60 мин';
-    if (t.match(/call|email|message|write|send|звон|письм|написа|отправ/)) return '10-20 мин';
-    if (t.match(/fix|repair|install|setup|почин|ремонт|установ|настро/)) return '1-2 часа';
-    if (t.match(/meet|meeting|appointment|встреч|собран/)) return '30-60 мин';
-    if (t.match(/play|game|movie|watch|игр|кино|смотре|фильм/)) return '1-2 часа';
-    if (t.match(/code|program|develop|код|програм|разработ/)) return '2-5 часов';
-    if (t.match(/design|дизайн|макет/)) return '2-4 часа';
-    if (task.priority === 'high') return '1-3 часа';
-    if (task.priority === 'low') return '15-30 мин';
-    return '30-60 мин';
+    if (t.match(/clean|wash|laundry|dishes|mop|sweep|vacuum|уборк|помы|постир|пылесос/)) return '30-60 min';
+    if (t.match(/cook|dinner|lunch|breakfast|meal|готов|обед|ужин|завтрак/)) return '45-90 min';
+    if (t.match(/study|learn|read|homework|essay|exam|учи|читать|домашн|экзамен|подготов/)) return '1-3 hours';
+    if (t.match(/work|project|report|presentation|работ|проект|отчёт|презентац/)) return '2-4 hours';
+    if (t.match(/exercise|gym|run|workout|sport|тренир|спорт|бег|зал/)) return '30-60 min';
+    if (t.match(/shop|buy|store|grocery|market|магазин|купить|покупк/)) return '30-60 min';
+    if (t.match(/call|email|message|write|send|звон|письм|написа|отправ/)) return '10-20 min';
+    if (t.match(/fix|repair|install|setup|почин|ремонт|установ|настро/)) return '1-2 hours';
+    if (t.match(/meet|meeting|appointment|встреч|собран/)) return '30-60 min';
+    if (t.match(/play|game|movie|watch|игр|кино|смотре|фильм/)) return '1-2 hours';
+    if (t.match(/code|program|develop|код|програм|разработ/)) return '2-5 hours';
+    if (t.match(/design|дизайн|макет/)) return '2-4 hours';
+    if (task.priority === 'high') return '1-3 hours';
+    if (task.priority === 'low') return '15-30 min';
+    return '30-60 min';
   }
 
   getTip(task: Task): string {
     const t = (task.title + ' ' + (task.description || '')).toLowerCase();
-    if (t.match(/clean|wash|mop|уборк|помы|постир/)) return 'Начни с самого сложного участка';
-    if (t.match(/study|learn|read|homework|учи|читать|домашн/)) return 'Помодоро: 25 мин фокус + 5 мин отдых';
-    if (t.match(/work|project|report|работ|проект|отчёт/)) return 'Раздели на подзадачи, начни с главной';
-    if (t.match(/exercise|gym|workout|тренир|спорт|зал/)) return 'Разминка 10 мин, потом основная часть';
-    if (t.match(/cook|dinner|lunch|готов|обед|ужин/)) return 'Подготовь ингредиенты заранее';
-    if (t.match(/shop|buy|grocery|магазин|купить/)) return 'Составь список, группируй по отделам';
-    if (t.match(/code|program|develop|код|програм/)) return 'Продумай архитектуру, потом код';
-    if (t.match(/play|game|игр|мафи/)) return 'Отдых важен! Но поставь таймер';
-    if (task.priority === 'high') return 'Сделай первым делом утром';
+    if (t.match(/clean|wash|mop|уборк|помы|постир/)) return 'Start with the hardest area first';
+    if (t.match(/study|learn|read|homework|учи|читать|домашн/)) return 'Pomodoro: 25 min focus + 5 min break';
+    if (t.match(/work|project|report|работ|проект|отчёт/)) return 'Break into subtasks, start with the main one';
+    if (t.match(/exercise|gym|workout|тренир|спорт|зал/)) return 'Warm up 10 min, then main workout';
+    if (t.match(/cook|dinner|lunch|готов|обед|ужин/)) return 'Prepare ingredients in advance';
+    if (t.match(/shop|buy|grocery|магазин|купить/)) return 'Make a list, group by sections';
+    if (t.match(/code|program|develop|код|програм/)) return 'Plan architecture first, then code';
+    if (t.match(/play|game|игр|мафи/)) return 'Rest is important! But set a timer';
+    if (task.priority === 'high') return 'Do this first thing in the morning';
     if (task.due_date) {
       const days = Math.ceil((new Date(task.due_date).getTime() - Date.now()) / 86400000);
-      if (days <= 0) return 'ПРОСРОЧЕНО! Сделай сейчас';
-      if (days <= 1) return 'Срочно! Осталось меньше суток';
-      if (days <= 3) return 'Дедлайн скоро — запланируй';
+      if (days <= 0) return 'OVERDUE! Do it now';
+      if (days <= 1) return 'Urgent! Less than a day left';
+      if (days <= 3) return 'Deadline soon — plan ahead';
     }
-    return 'Раздели на шаги и начни с первого';
+    return 'Break into steps and start with the first one';
   }
 
   getNeeds(task: Task): string {
     const t = (task.title + ' ' + (task.description || '')).toLowerCase();
-    if (t.match(/clean|wash|mop|уборк|помы/)) return 'Тряпки, моющее, пылесос';
-    if (t.match(/study|learn|homework|учи|домашн/)) return 'Тетрадь, учебник, тихое место';
-    if (t.match(/cook|dinner|готов|обед|ужин/)) return 'Продукты, кухонная утварь';
-    if (t.match(/exercise|gym|тренир|зал/)) return 'Спортивная одежда, вода';
-    if (t.match(/shop|buy|магазин|купить/)) return 'Список покупок, карта';
-    if (t.match(/code|program|код|програм/)) return 'Компьютер, IDE, документация';
-    if (t.match(/play|game|игр|мафи/)) return 'Друзья, хорошее настроение';
-    return 'Спокойная обстановка, план действий';
+    if (t.match(/clean|wash|mop|уборк|помы/)) return 'Rags, cleaner, vacuum';
+    if (t.match(/study|learn|homework|учи|домашн/)) return 'Notebook, textbook, quiet place';
+    if (t.match(/cook|dinner|готов|обед|ужин/)) return 'Ingredients, kitchen tools';
+    if (t.match(/exercise|gym|тренир|зал/)) return 'Sportswear, water bottle';
+    if (t.match(/shop|buy|магазин|купить/)) return 'Shopping list, payment card';
+    if (t.match(/code|program|код|програм/)) return 'Computer, IDE, documentation';
+    if (t.match(/play|game|игр|мафи/)) return 'Friends, good mood';
+    return 'Calm environment, action plan';
   }
 
   ngOnInit() {
