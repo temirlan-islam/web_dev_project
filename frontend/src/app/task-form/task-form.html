@@ -1,0 +1,63 @@
+<div class="page">
+  <div class="navbar">
+    <div class="nav-left">
+      <button class="btn-back" routerLink="/tasks">← Back</button>
+      <h1>{{ id ? 'Edit Task' : 'New Task' }}</h1>
+    </div>
+  </div>
+
+  <div class="content">
+    <div class="form-card">
+      <form (ngSubmit)="save()" class="task-form">
+        <div class="field">
+          <label>Title</label>
+          <input type="text" [(ngModel)]="task.title" name="title" placeholder="Enter task title" />
+        </div>
+        <div class="field">
+          <label>Description</label>
+          <textarea [(ngModel)]="task.description" name="description" rows="4" placeholder="Enter task description"></textarea>
+        </div>
+        <div class="field-grid">
+          <div class="field">
+            <label>Priority</label>
+            <select [(ngModel)]="task.priority" name="priority">
+              <option value="low">Low</option>
+              <option value="medium">Medium</option>
+              <option value="high">High</option>
+            </select>
+          </div>
+          <div class="field" *ngIf="categories.length > 0">
+            <label>Category</label>
+            <select [(ngModel)]="task.category" name="category">
+              <option [ngValue]="null">— None —</option>
+              <option *ngFor="let cat of categories" [ngValue]="cat.id">{{ cat.name }}</option>
+            </select>
+          </div>
+        </div>
+        <div class="field">
+          <label>Due Date</label>
+          <div class="date-picker">
+            <div class="date-quick">
+              <button type="button" [class.active]="isDateToday" (click)="setDate(0)">Today</button>
+              <button type="button" [class.active]="isDateTomorrow" (click)="setDate(1)">Tomorrow</button>
+              <button type="button" [class.active]="isDateNextWeek" (click)="setDate(7)">Next week</button>
+              <button type="button" class="clear-btn" *ngIf="task.due_date" (click)="clearDate()">✕</button>
+            </div>
+            <input type="date" [(ngModel)]="task.due_date" name="due_date" [min]="minDate" [max]="maxDate" />
+            <span class="date-display" *ngIf="task.due_date">{{ task.due_date }}</span>
+          </div>
+        </div>
+        <div class="field field-row">
+          <label class="checkbox-row">
+            <input type="checkbox" [(ngModel)]="task.status" name="status" />
+            <span>Mark as completed</span>
+          </label>
+        </div>
+        <div class="form-actions">
+          <button type="submit" class="btn-save">Save</button>
+          <button type="button" class="btn-cancel" routerLink="/tasks">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

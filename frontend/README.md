@@ -1,3 +1,12 @@
+# Task Manager
+
+Task Manager is a web application for managing tasks and projects.  
+Built with Angular + Django REST Framework.
+
+## Members
+- Temirlan
+- Zangar
+- Anel
 # Frontend
 
 This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.1.5.

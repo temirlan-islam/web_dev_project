@@ -1,0 +1,155 @@
+<div class="page">
+  <header class="header">
+    <div class="header-inner">
+      <div class="header-left">
+        <div class="logo-box">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M5 12l5 5L19 7" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <span class="logo-text">TaskPro</span>
+      </div>
+      <div class="header-right">
+        <a class="btn-dashboard" routerLink="/dashboard">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="2" y="2" width="6" height="6" rx="2" stroke="currentColor" stroke-width="1.5"/><rect x="10" y="2" width="6" height="6" rx="2" stroke="currentColor" stroke-width="1.5"/><rect x="2" y="10" width="6" height="6" rx="2" stroke="currentColor" stroke-width="1.5"/><rect x="10" y="10" width="6" height="6" rx="2" stroke="currentColor" stroke-width="1.5"/></svg>
+          Dashboard
+        </a>
+        <button class="btn-add" routerLink="/tasks/new">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 3v12M3 9h12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          New Task
+        </button>
+        <button class="btn-logout" (click)="logout()">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M7 16H3a1 1 0 01-1-1V3a1 1 0 011-1h4M13 12l3-3-3-3M16 9H7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Logout
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="content">
+    <div *ngIf="errorMessage" class="error-banner">{{ errorMessage }}</div>
+
+    <div *ngIf="isLoading" class="loading">
+      <div class="spinner"></div>
+      <span>Loading tasks...</span>
+    </div>
+
+    <div *ngIf="!isLoading">
+      <!-- Stats -->
+      <div class="stats-row">
+        <div class="stat-card">
+          <div class="stat-icon total-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="18" height="18" rx="4" stroke="white" stroke-width="1.5"/><path d="M8 12h8M12 8v8" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg>
+          </div>
+          <div class="stat-info">
+            <span class="stat-num">{{ totalCount }}</span>
+            <span class="stat-label">Total</span>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon pending-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="8" stroke="white" stroke-width="1.5"/><path d="M12 8v4l3 3" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg>
+          </div>
+          <div class="stat-info">
+            <span class="stat-num pending-num">{{ pendingCount }}</span>
+            <span class="stat-label">Pending</span>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon done-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="8" stroke="white" stroke-width="1.5"/><path d="M9 12l2 2 4-4" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <div class="stat-info">
+            <span class="stat-num done-num">{{ doneCount }}</span>
+            <span class="stat-label">Done</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Progress -->
+      <div class="progress-section">
+        <div class="progress-header">
+          <span class="progress-label">Overall Progress</span>
+          <span class="progress-percent">{{ totalCount > 0 ? (doneCount * 100 / totalCount | number:'1.0-0') : 0 }}%</span>
+        </div>
+        <div class="progress-bar">
+          <div class="progress-fill" [style.width.%]="doneCount > 0 ? (doneCount / totalCount * 100) : 0"></div>
+        </div>
+      </div>
+
+      <!-- Toolbar -->
+      <div class="toolbar">
+        <div class="filter-tabs">
+          <button [class.active]="filter === 'all'" (click)="setFilter('all')">All</button>
+          <button [class.active]="filter === 'pending'" (click)="setFilter('pending')">Pending</button>
+          <button [class.active]="filter === 'done'" (click)="setFilter('done')">Done</button>
+        </div>
+        <div class="toolbar-right">
+          <select class="sort-select" [(ngModel)]="sortBy">
+            <option value="created">Newest</option>
+            <option value="title">Title A-Z</option>
+            <option value="priority">Priority</option>
+            <option value="due">Due date</option>
+          </select>
+          <div class="search-box">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="8" cy="8" r="5" stroke="#6b7294" stroke-width="1.5"/><path d="M12 12l3.5 3.5" stroke="#6b7294" stroke-width="1.5" stroke-linecap="round"/></svg>
+            <input type="text" [(ngModel)]="searchTerm" placeholder="Search tasks..." />
+          </div>
+        </div>
+      </div>
+
+      <!-- Empty states -->
+      <div *ngIf="filteredTasks.length === 0 && tasks.length > 0" class="empty-state small">
+        <p>No tasks match your filter or search</p>
+      </div>
+
+      <div *ngIf="tasks.length === 0" class="empty-state">
+        <div class="empty-illustration">
+          <svg width="80" height="80" viewBox="0 0 80 80" fill="none"><rect x="10" y="16" width="60" height="52" rx="6" stroke="#2a3178" stroke-width="2"/><path d="M28 32h24M28 42h24M28 52h16" stroke="#2a3178" stroke-width="2" stroke-linecap="round"/><circle cx="60" cy="20" r="10" fill="#f0b90b"/><path d="M56 20l2.5 2.5L63 17" stroke="#0a0e27" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <h3>No tasks yet</h3>
+        <p>Click "New Task" to create your first task</p>
+      </div>
+
+      <!-- Task grid -->
+      <div class="task-grid">
+        <div *ngFor="let task of filteredTasks" class="task-card" [class.completed]="task.status" [class.overdue]="isOverdue(task)">
+          <div class="task-top">
+            <label class="checkbox-wrap">
+              <input type="checkbox" [checked]="task.status" (change)="toggleStatus(task)" />
+            </label>
+            <div class="badges">
+              <span *ngIf="task.priority" class="badge priority-badge" [class.prio-high]="task.priority === 'high'" [class.prio-medium]="task.priority === 'medium'" [class.prio-low]="task.priority === 'low'">
+                {{ task.priority }}
+              </span>
+              <span *ngIf="task.category_name" class="badge badge-cat">{{ task.category_name }}</span>
+              <span class="badge" [class.badge-done]="task.status" [class.badge-pending]="!task.status">
+                {{ task.status ? 'Done' : 'Pending' }}
+              </span>
+            </div>
+          </div>
+          <h3 class="task-title">{{ task.title }}</h3>
+          <p *ngIf="task.description" class="task-desc">{{ task.description }}</p>
+          <div class="task-meta" *ngIf="task.due_date || task.created_at">
+            <span *ngIf="task.due_date" class="meta-item" [class.overdue-text]="isOverdue(task)">
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="2" y="3" width="10" height="9" rx="1.5" stroke="currentColor" stroke-width="1.2"/><path d="M2 6h10M5 2v2M9 2v2" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+              Due: {{ task.due_date }}
+              <span *ngIf="isOverdue(task)" class="overdue-tag">Overdue</span>
+            </span>
+            <span *ngIf="task.created_at" class="meta-item subtle">
+              Created: {{ task.created_at | date:'shortDate' }}
+            </span>
+          </div>
+          <div class="task-footer">
+            <button class="btn-edit" [routerLink]="['/tasks', task.id]">
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M10 2l2 2-7 7H3v-2l7-7z" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              Edit
+            </button>
+            <button class="btn-delete" (click)="deleteTask(task.id!)">
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 4h10M5 4V2h4v2M6 7v3M8 7v3M3 4l.7 8h6.6l.7-8" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              Delete
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>

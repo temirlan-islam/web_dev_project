@@ -1,0 +1,88 @@
+.page { min-height: 100vh; background: #000; }
+
+.navbar {
+  background: rgba(0,0,0,0.95); backdrop-filter: blur(12px);
+  padding: 0 24px; border-bottom: 1px solid #111;
+}
+.nav-left {
+  max-width: 1200px; margin: 0 auto;
+  display: flex; align-items: center; gap: 16px; height: 60px;
+}
+.btn-back {
+  padding: 8px 16px; background: #0a0a0a; border: 1px solid #1a1a1a;
+  border-radius: 8px; color: #555; font-size: 13px; font-weight: 600;
+  cursor: pointer; transition: all 0.15s;
+}
+.btn-back:hover { background: #111; color: #999; }
+.navbar h1 { font-size: 18px; font-weight: 800; color: #fff; }
+
+.content { max-width: 600px; margin: 0 auto; padding: 32px 24px; animation: fadeUp 0.3s ease; }
+.form-card {
+  background: #0a0a0a; border: 1px solid #111; border-radius: 16px; padding: 32px;
+}
+
+.task-form .field { margin-bottom: 22px; }
+.task-form label {
+  display: block; margin-bottom: 8px; font-size: 11px; font-weight: 700;
+  color: #444; text-transform: uppercase; letter-spacing: 0.8px;
+}
+.task-form input[type="text"], .task-form textarea {
+  width: 100%; padding: 13px 14px; background: #050505; border: 1px solid #1a1a1a;
+  border-radius: 10px; color: #ccc; font-size: 14px; transition: all 0.2s; resize: vertical;
+}
+.task-form input[type="text"]:focus, .task-form textarea:focus {
+  outline: none; border-color: #f0b90b; box-shadow: 0 0 0 2px rgba(240,185,11,0.06);
+}
+.task-form input::placeholder, .task-form textarea::placeholder { color: #222; }
+
+.task-form select {
+  width: 100%; padding: 13px 14px; background: #050505; border: 1px solid #1a1a1a;
+  border-radius: 10px; color: #ccc; font-size: 14px; cursor: pointer;
+  -webkit-appearance: none; appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1.5L6 6.5L11 1.5' stroke='%23444' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: right 14px center;
+  transition: all 0.2s;
+}
+.task-form select:focus { outline: none; border-color: #f0b90b; box-shadow: 0 0 0 2px rgba(240,185,11,0.06); }
+
+.date-picker { display: flex; flex-direction: column; gap: 8px; }
+.date-quick { display: flex; gap: 5px; flex-wrap: wrap; }
+.date-quick button {
+  padding: 7px 14px; border-radius: 8px; font-size: 12px; font-weight: 600;
+  border: 1px solid #1a1a1a; background: #050505; color: #444; cursor: pointer; transition: all 0.15s;
+}
+.date-quick button:hover { border-color: rgba(240,185,11,0.2); color: #f0b90b; }
+.date-quick button.active { border-color: #f0b90b; color: #000; background: #f0b90b; font-weight: 700; }
+.date-quick .clear-btn { border-color: rgba(239,68,68,0.15); color: #ef4444; background: rgba(239,68,68,0.03); min-width: 32px; }
+.date-quick .clear-btn:hover { background: rgba(239,68,68,0.06); }
+.date-picker input[type="date"] {
+  width: 100%; padding: 11px 14px; background: #050505; border: 1px solid #1a1a1a;
+  border-radius: 10px; color: #999; font-size: 13px; cursor: pointer; color-scheme: dark;
+  transition: all 0.2s;
+}
+.date-picker input[type="date"]:focus { outline: none; border-color: #f0b90b; }
+.date-display { font-size: 11px; color: #f0b90b; font-weight: 600; }
+
+.field-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+
+.form-actions { display: flex; gap: 10px; margin-top: 12px; }
+.btn-save {
+  padding: 12px 28px; background: #f0b90b; border: none; border-radius: 10px;
+  color: #000; font-size: 14px; font-weight: 700; cursor: pointer; transition: all 0.2s;
+}
+.btn-save:hover { box-shadow: 0 4px 14px rgba(240,185,11,0.25); transform: translateY(-1px); }
+.btn-cancel {
+  padding: 12px 28px; background: #0a0a0a; border: 1px solid #1a1a1a;
+  border-radius: 10px; color: #555; font-size: 14px; font-weight: 600;
+  cursor: pointer; transition: all 0.15s;
+}
+.btn-cancel:hover { background: #111; color: #999; }
+
+.field-row { display: flex; align-items: center; }
+.checkbox-row {
+  display: flex; align-items: center; gap: 10px; cursor: pointer;
+  font-size: 14px; color: #999; font-weight: 500;
+}
+.checkbox-row input[type="checkbox"] { width: 18px; height: 18px; accent-color: #f0b90b; cursor: pointer; }
+
+@media (max-width: 480px) { .field-grid { grid-template-columns: 1fr; } .form-card { padding: 24px; } }
